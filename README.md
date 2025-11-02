@@ -1,6 +1,6 @@
 # GBar - Game Timer Toolbar
 
-A minimal timer toolbar for web browsers with game-specific presets. Clean, understated design perfect for gaming sessions.
+A minimal timer toolbar for mafia.org. Compatible with all Chromium browsers and more.
 
 ## ✨ Features
 
