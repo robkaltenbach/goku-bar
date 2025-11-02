@@ -136,7 +136,7 @@ class GBarTimer {
                   <span class="gbar-slash">/</span>
                   <span class="gbar-author-name">Transistor</span>
                 </div>
-                <div class="gbar-version">Version 1.4.0 • 10/27/25</div>
+                <div class="gbar-version">Version 1.5.0 • 10/27/25</div>
                 <p class="gbar-description">A minimal timer toolbar for Mafia.org with customizable presets and persistent timers.</p>
                 
                 <div class="gbar-contact">
