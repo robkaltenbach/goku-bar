@@ -26,6 +26,17 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
+          name: GBar Extension v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## GBar Extension v${{ steps.get_version.outputs.VERSION }}
+            
+            Download the extension ZIP file below and follow the [installation instructions](https://github.com/robkaltenbach/goku-bar#installation).
+            
+            ### Installation
+            1. Download `GBar-Extension-v${{ steps.get_version.outputs.VERSION }}.zip`
+            2. Extract the ZIP file
+            3. Load as unpacked extension in your browser
           files: GBar-Extension-v${{ steps.get_version.outputs.VERSION }}.zip
           draft: false
           prerelease: false
