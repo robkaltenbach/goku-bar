@@ -777,6 +777,57 @@ body.gbar-active {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* Update Notification */
+.gbar-update-notification {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background: #1a3a1a;
+  border: 2px solid #2a8a2a;
+  border-radius: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gbar-update-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.gbar-update-content strong {
+  color: #4ade80;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gbar-update-content > span {
+  color: #cccccc;
+  font-size: 13px;
+}
+
+.gbar-update-content #gbar-latest-version {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.gbar-update-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #2a8a2a;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  margin-top: 4px;
+}
+
+.gbar-update-link:hover {
+  background: #3aaa3a;
+  color: #ffffff;
+}
+
 
 /* Apply font color using CSS variable */
 #gbar-toolbar {

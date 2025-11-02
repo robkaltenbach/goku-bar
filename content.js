@@ -11,6 +11,9 @@ class GBarTimer {
     this.dropdownOpen = false;
     this.fontColor = '#ffffff'; // Default white font
     this.saveInterval = null; // For periodic timer saves
+    this.currentVersion = '1.5.1'; // Current extension version
+    this.latestVersion = null; // Latest version from GitHub
+    this.lastUpdateCheck = null; // Last time we checked for updates
     
     // Game-specific timers with Mafia.org URLs
     this.presets = [
@@ -38,6 +41,9 @@ class GBarTimer {
     
     // Start the main timer loop that updates all timers
     this.startTimerLoop();
+    
+    // Check for updates (async, don't block initialization)
+    this.checkForUpdates();
   }
   
   initializeCustomInputs() {
@@ -136,7 +142,14 @@ class GBarTimer {
                   <span class="gbar-slash">/</span>
                   <span class="gbar-author-name">Transistor</span>
                 </div>
-                <div class="gbar-version">Version 1.5.0 • 10/27/25</div>
+                <div class="gbar-version">Version 1.5.1 • 10/27/25</div>
+                <div class="gbar-update-notification" id="gbar-update-notification" style="display: none;">
+                  <div class="gbar-update-content">
+                    <strong>Update Available!</strong>
+                    <span>Version <span id="gbar-latest-version"></span> is now available.</span>
+                    <a href="https://github.com/robkaltenbach/goku-bar/releases/latest" target="_blank" class="gbar-update-link">Download Update</a>
+                  </div>
+                </div>
                 <p class="gbar-description">A minimal timer toolbar for Mafia.org with customizable presets and persistent timers.</p>
                 
                 <div class="gbar-contact">
@@ -420,6 +433,10 @@ class GBarTimer {
   openModal() {
     const modal = document.getElementById('gbar-modal');
     modal.classList.add('open');
+    // Check if update notification should be shown when modal opens
+    if (this.latestVersion) {
+      this.showUpdateNotificationIfNeeded();
+    }
   }
   
   closeModal() {
@@ -703,7 +720,7 @@ class GBarTimer {
   async loadSettings() {
     try {
       const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
-      const result = await browserAPI.storage.local.get(['soundEnabled', 'customMinutes', 'customSeconds', 'fontColor']);
+      const result = await browserAPI.storage.local.get(['soundEnabled', 'customMinutes', 'customSeconds', 'fontColor', 'lastUpdateCheck', 'latestVersion']);
       
       if (result.soundEnabled !== undefined) {
         this.soundEnabled = result.soundEnabled;
@@ -723,6 +740,12 @@ class GBarTimer {
       if (result.fontColor !== undefined) {
         this.fontColor = result.fontColor;
       }
+      if (result.lastUpdateCheck !== undefined) {
+        this.lastUpdateCheck = result.lastUpdateCheck;
+      }
+      if (result.latestVersion !== undefined) {
+        this.latestVersion = result.latestVersion;
+      }
       
       // Apply font color
       document.documentElement.style.setProperty('--gbar-font-color', this.fontColor);
@@ -738,11 +761,93 @@ class GBarTimer {
         soundEnabled: this.soundEnabled,
         customMinutes: this.customMinutes,
         customSeconds: this.customSeconds,
-        fontColor: this.fontColor
+        fontColor: this.fontColor,
+        lastUpdateCheck: this.lastUpdateCheck,
+        latestVersion: this.latestVersion
       });
     } catch (error) {
       console.log('Settings save failed:', error);
     }
+  }
+  
+  async checkForUpdates() {
+    try {
+      // Check at most once per day
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+      
+      // Load last check time from storage
+      const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+      const result = await browserAPI.storage.local.get(['lastUpdateCheck', 'latestVersion']);
+      
+      if (result.lastUpdateCheck && (now - result.lastUpdateCheck < oneDay)) {
+        // Use cached version if available
+        if (result.latestVersion) {
+          this.latestVersion = result.latestVersion;
+          this.showUpdateNotificationIfNeeded();
+        }
+        return;
+      }
+      
+      // Fetch latest release from GitHub API
+      const response = await fetch('https://api.github.com/repos/robkaltenbach/goku-bar/releases/latest', {
+        headers: {
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      
+      if (!response.ok) {
+        console.log('GBar: Failed to check for updates');
+        return;
+      }
+      
+      const release = await response.json();
+      // Extract version from tag (e.g., "v1.5.0" -> "1.5.0")
+      const latestVersion = release.tag_name.replace(/^v/, '');
+      this.latestVersion = latestVersion;
+      this.lastUpdateCheck = now;
+      
+      // Save to storage
+      await browserAPI.storage.local.set({
+        lastUpdateCheck: now,
+        latestVersion: latestVersion
+      });
+      
+      this.showUpdateNotificationIfNeeded();
+    } catch (error) {
+      console.log('GBar: Update check failed:', error);
+    }
+  }
+  
+  showUpdateNotificationIfNeeded() {
+    if (!this.latestVersion) return;
+    
+    // Compare versions (simple string comparison works for semantic versioning)
+    if (this.compareVersions(this.currentVersion, this.latestVersion) < 0) {
+      const notification = document.getElementById('gbar-update-notification');
+      const versionSpan = document.getElementById('gbar-latest-version');
+      
+      if (notification && versionSpan) {
+        versionSpan.textContent = this.latestVersion;
+        notification.style.display = 'block';
+      }
+    }
+  }
+  
+  compareVersions(version1, version2) {
+    // Simple version comparison: "1.4.0" vs "1.5.0"
+    const v1parts = version1.split('.').map(Number);
+    const v2parts = version2.split('.').map(Number);
+    
+    for (let i = 0; i < Math.max(v1parts.length, v2parts.length); i++) {
+      const v1part = v1parts[i] || 0;
+      const v2part = v2parts[i] || 0;
+      
+      if (v1part < v2part) return -1;
+      if (v1part > v2part) return 1;
+    }
+    
+    return 0;
   }
   
 }
