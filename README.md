@@ -84,7 +84,25 @@ gbar-extension/
 └── README.md           # This file
 ```
 
+## 🔄 Updating the Extension
+
+**For Users:**
+- Check the [Releases page](https://github.com/robkaltenbach/goku-bar/releases) for the latest version
+- Download the latest `GBar-Extension-v*.zip` file
+- Extract and replace your current extension folder
+- Reload the extension in your browser
+
+**Automatic Updates:**
+- While not published to official stores, you can bookmark the releases page
+- New versions are automatically packaged and released on GitHub
+- See [AUTO-UPDATE-SETUP.md](AUTO-UPDATE-SETUP.md) for advanced auto-update configuration
+
 ## 🚀 Publishing
+
+### GitHub Releases (Current Method)
+1. Update version in `manifest.json`, `content.js`, and `popup.html`
+2. Create a git tag: `git tag v1.4.0 && git push origin v1.4.0`
+3. GitHub Actions automatically creates a release with the ZIP file
 
 ### Opera Add-ons
 1. Create account at [Opera Add-ons](https://addons.opera.com/developer/)
