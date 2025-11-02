@@ -1,0 +1,16 @@
+# Distribution zip files
+*.zip
+
+# Extension build folder
+ext/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+

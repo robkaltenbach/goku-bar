@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "GBar - Game Timer Toolbar",
+  "version": "1.4.0",
+  "description": "Minimal timer toolbar for gaming with customizable presets. Works in Opera, Chrome, Edge & Brave.",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://www.mafia.org/*",
+    "*://mafia.org/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://www.mafia.org/*", "*://mafia.org/*"],
+      "js": ["content.js"],
+      "css": ["toolbar.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

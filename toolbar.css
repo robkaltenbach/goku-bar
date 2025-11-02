@@ -1,0 +1,792 @@
+/* GBar Toolbar Styles */
+
+/* Reserve space immediately to prevent layout shift */
+html.gbar-active {
+  margin-top: 10px !important;
+  transition: margin-top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Create a static placeholder bar using CSS to eliminate flash */
+html::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 35px; /* Adjusted to match exact toolbar height */
+  background: #000000;
+  border-bottom: 1px solid #333333;
+  z-index: 2147483646;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0s 0.4s;
+}
+
+/* Show and position placeholder when active */
+html.gbar-active::before {
+  opacity: 1;
+  transform: translateX(0);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0s 0s;
+}
+
+/* Hide placeholder and remove spacing when toolbar is collapsed */
+html.gbar-collapsed {
+  margin-top: 0 !important;
+}
+
+html.gbar-collapsed::before {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0s 0.4s;
+}
+
+#gbar-toolbar {
+  all: initial;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: auto;
+  background: #000000;
+  border-bottom: 1px solid #333333;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 20px;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  color: #ffffff;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* When toolbar loads, it appears instantly over the placeholder */
+
+#gbar-toolbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 60% 70%, rgba(200, 200, 200, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 30%, rgba(255, 100, 100, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(220, 220, 220, 0.08) 0%, transparent 50%);
+  background-size: 200% 200%;
+  animation: gbar-orbs 20s ease-in-out infinite;
+  filter: blur(40px);
+  z-index: 0;
+}
+
+@keyframes gbar-orbs {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%;
+  }
+  25% {
+    background-position: 100% 50%, 0% 50%, 70% 70%, 30% 80%;
+  }
+  50% {
+    background-position: 50% 100%, 50% 0%, 20% 30%, 90% 40%;
+  }
+  75% {
+    background-position: 0% 50%, 100% 50%, 80% 80%, 10% 60%;
+  }
+}
+
+#gbar-toolbar > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Arial Black', sans-serif;
+}
+
+
+#gbar-toolbar * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#gbar-toolbar.collapsed {
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gbar-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.gbar-preset-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.gbar-custom-input-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.gbar-custom-input-container.open {
+  width: 120px;
+  opacity: 1;
+}
+
+.gbar-custom-input {
+  width: 50px;
+  background: #1a1a1a;
+  border: 2px solid #555555;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 8px 6px;
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  box-sizing: border-box;
+}
+
+.gbar-custom-input::-webkit-outer-spin-button,
+.gbar-custom-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.gbar-custom-input:focus {
+  outline: none;
+  border-color: #ffffff;
+  background: #2a2a2a;
+}
+
+.gbar-custom-separator {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.gbar-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background: #2a2a2a;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  text-transform: none;
+  letter-spacing: 0.3px;
+  min-width: 80px;
+  box-shadow: none;
+  outline: none;
+}
+
+.gbar-btn:hover {
+  background: #3a3a3a;
+  color: #ffffff;
+}
+
+.gbar-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.gbar-btn:disabled:hover {
+  background: #2a2a2a;
+  transform: none;
+}
+
+.gbar-btn:active {
+  background: #1a1a1a;
+  transform: none;
+}
+
+.gbar-btn.preset {
+  background: #2a2a2a;
+}
+
+.gbar-btn.preset:hover {
+  background: #3a3a3a;
+  color: #ffffff;
+}
+
+.gbar-btn.preset.active {
+  background: #1e88e5;
+  color: #ffffff;
+}
+
+.gbar-btn.preset.running {
+  background: #1976d2;
+  color: #ffffff;
+  animation: gbar-pulse 2s infinite;
+  padding: 8px 20px;
+  min-width: 120px;
+}
+
+.gbar-btn.preset[data-label="Bank Robbery"] {
+  padding: 8px 12px;
+  min-width: 130px;
+}
+
+@keyframes gbar-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.gbar-toggle {
+  background: #2a2a2a;
+  border: none;
+  padding: 8px 6px;
+  font-size: 14px;
+  color: #ffffff;
+  border-radius: 6px;
+  width: 28px !important;
+  height: auto !important;
+  min-width: 28px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.gbar-toggle:hover {
+  background: #3a3a3a;
+  color: #ffffff;
+}
+
+.gbar-toggle.expand {
+  background: #2a2a2a;
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 2147483648;
+  border-radius: 6px;
+  width: 28px !important;
+  height: auto !important;
+  min-width: 28px !important;
+  padding: 8px 6px;
+  font-size: 14px;
+}
+
+.gbar-toggle.expand:hover {
+  background: #3a3a3a;
+}
+
+/* Push page content down */
+body.gbar-active {
+  padding-top: 40px !important;
+}
+
+/* Removed duplicate - now at top of file for faster loading */
+
+/* Sound indicator */
+.gbar-sound-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.2s ease;
+  user-select: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.gbar-sound-icon:hover {
+  color: #ffffff;
+  background: #2a2a2a;
+}
+
+.gbar-sound-icon.muted {
+  opacity: 0.6;
+  color: #666666;
+}
+
+/* Flat sound icons */
+.gbar-sound-icon::before {
+  content: "♪";
+  font-size: 16px;
+}
+
+.gbar-sound-icon.muted::before {
+  content: "♫";
+}
+
+/* Settings Icon */
+.gbar-settings-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.2s ease;
+  user-select: none;
+  color: var(--gbar-font-color, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  position: relative;
+}
+
+.gbar-settings-icon:hover {
+  background: #2a2a2a;
+}
+
+.gbar-settings-icon::before {
+  content: "⚙";
+  font-size: 16px;
+  color: var(--gbar-font-color, #ffffff);
+}
+
+/* Modal */
+.gbar-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2147483648;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.gbar-modal.open {
+  display: flex;
+}
+
+.gbar-modal-content {
+  background: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.gbar-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #333333;
+}
+
+.gbar-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gbar-font-color, #ffffff);
+}
+
+.gbar-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--gbar-font-color, #ffffff);
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  box-shadow: none;
+  transition: background-color 0.2s ease;
+}
+
+.gbar-modal-close:hover {
+  background: #2a2a2a;
+}
+
+.gbar-modal-layout {
+  display: flex;
+  min-height: 300px;
+}
+
+.gbar-modal-nav {
+  width: 150px;
+  background: #0f0f0f;
+  border-right: 1px solid #333333;
+  padding: 12px 0;
+  flex-shrink: 0;
+}
+
+.gbar-nav-item {
+  width: 100%;
+  background: #0f0f0f;
+  border: none;
+  color: #999999;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+}
+
+.gbar-nav-item:hover {
+  background: #1a1a1a;
+  color: var(--gbar-font-color, #ffffff);
+}
+
+.gbar-nav-item.active {
+  background: #1a1a1a;
+  color: var(--gbar-font-color, #ffffff);
+}
+
+.gbar-modal-body {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.gbar-section {
+  display: none;
+}
+
+.gbar-section.active {
+  display: block;
+}
+
+.gbar-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gbar-font-color, #ffffff);
+}
+
+.gbar-about-content {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gbar-author {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.gbar-made-by {
+  color: #999999;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.gbar-author-name {
+  color: var(--gbar-font-color, #ffffff);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 4px;
+}
+
+.gbar-slash {
+  color: #666666;
+  font-size: 18px;
+  margin: 0 2px;
+}
+
+.gbar-version {
+  font-size: 12px;
+  color: #999999;
+  margin-bottom: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gbar-description {
+  font-size: 14px;
+  color: #cccccc;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gbar-contact {
+  margin-bottom: 28px;
+}
+
+.gbar-contact h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gbar-font-color, #ffffff);
+  margin: 0 0 12px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gbar-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.gbar-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #2a2a2a;
+  border-radius: 6px;
+  color: #cccccc;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  flex: 1;
+}
+
+.gbar-contact-link:hover {
+  background: #3a3a3a;
+  color: var(--gbar-font-color, #ffffff);
+}
+
+.gbar-copy-btn {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 8px;
+  cursor: pointer;
+  color: #cccccc;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+.gbar-copy-btn:hover {
+  background: transparent;
+  color: var(--gbar-font-color, #ffffff);
+}
+
+.gbar-copy-btn.copied {
+  background: transparent;
+  color: #90ee90;
+}
+
+.gbar-copy-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.gbar-x-icon,
+.gbar-email-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.gbar-donate {
+  background: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.gbar-donate-text {
+  font-size: 14px;
+  color: #cccccc;
+  margin: 0 0 12px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gbar-donate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #0070ba;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gbar-donate-btn:hover {
+  background: #005ea6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 112, 186, 0.3);
+}
+
+.gbar-paypal-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.gbar-mafia-donate {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gbar-mafia-key {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.gbar-key-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+
+.gbar-key-value {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--gbar-font-color, #ffffff);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.gbar-setting {
+  margin-bottom: 20px;
+}
+
+.gbar-setting label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--gbar-font-color, #ffffff);
+  font-size: 14px;
+}
+
+/* Color Picker */
+.gbar-color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gbar-gradient-box {
+  width: 100%;
+  height: 250px;
+  border-radius: 8px;
+  border: 2px solid #333333;
+  cursor: crosshair;
+  position: relative;
+  background: linear-gradient(to bottom, 
+    hsl(0, 0%, 100%) 0%,
+    hsl(0, 100%, 50%) 50%,
+    hsl(0, 0%, 0%) 100%
+  );
+  background-image: 
+    linear-gradient(to bottom, 
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 15%,
+      rgba(0, 0, 0, 0) 85%,
+      rgba(0, 0, 0, 1) 100%
+    ),
+    linear-gradient(to right,
+      hsl(0, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(360, 100%, 50%)
+    );
+}
+
+.gbar-color-cursor {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 1px #000000, 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.gbar-color-preview-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #0f0f0f;
+  border-radius: 8px;
+  border: 1px solid #333333;
+}
+
+.gbar-color-preview {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  border: 2px solid #333333;
+  background: var(--gbar-font-color, #ffffff);
+  flex-shrink: 0;
+}
+
+.gbar-color-label {
+  font-size: 14px;
+  color: #cccccc;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+
+/* Apply font color using CSS variable */
+#gbar-toolbar {
+  color: var(--gbar-font-color, #ffffff);
+}
+
+.gbar-logo,
+.gbar-btn,
+.gbar-sound-icon,
+.gbar-toggle,
+.gbar-custom-input {
+  color: var(--gbar-font-color, #ffffff);
+}
